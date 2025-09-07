@@ -1,9 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 
 // --- Configuration ---
-// This will be the URL of your deployed Cloudflare Pages site.
-// For local development, you might point this to your `wrangler dev` URL.
-// When deployed, we can use a relative path like '/api'.
 const API_BASE_URL = '/api';
 
 // --- Unique Codes (Unchanged) ---
@@ -42,7 +39,6 @@ const Navbar = ({ setCurrentPage, handleLogout, isAdmin, guestCode }) => (
 const NavLink = ({ children, onClick }) => (<button onClick={onClick} className="text-stone-200 hover:bg-gray-800 hover:text-white transition-colors duration-200 text-lg font-semibold px-3 py-1 rounded-md">{children}</button>);
 
 // --- Page Components ---
-
 const HomePage = ({ setCurrentPage, isAdmin, guestCode, handleLogout }) => {
   const websiteLink = window.location.href;
   const qrCodeUrl = `https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=${encodeURIComponent(websiteLink)}`;
@@ -102,6 +98,14 @@ const RSVPPage = ({ guestCode, setCurrentPage, setLoginRedirectPath }) => {
   const [submitMessage, setSubmitMessage] = useState('');
   const [isModalOpen, setIsModalOpen] = useState(false);
 
+  // FIX: Moved useEffect to top level and put condition inside.
+  useEffect(() => {
+    if (!guestCode) {
+      setLoginRedirectPath('rsvp');
+      setCurrentPage('login');
+    }
+  }, [guestCode, setCurrentPage, setLoginRedirectPath]);
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     setIsSubmitting(true);
@@ -123,8 +127,9 @@ const RSVPPage = ({ guestCode, setCurrentPage, setLoginRedirectPath }) => {
     }
   };
   
-  // Unchanged form logic and JSX follows...
-  if (!guestCode) { useEffect(() => { setLoginRedirectPath('rsvp'); setCurrentPage('login'); }, [setCurrentPage, setLoginRedirectPath]); return null; }
+  // Early return after hooks if not logged in
+  if (!guestCode) { return null; }
+
   const visibleEventTitles = getVisibleEvents(guestCode);
   const eventsToDisplay = allEvents.filter(event => visibleEventTitles.includes(event.title));
   const handleChange = (e) => setFormData(prev => ({ ...prev, [e.target.name]: e.target.value }));
@@ -139,6 +144,14 @@ const GiftRegistryPage = ({ guestCode, setCurrentPage, setLoginRedirectPath }) =
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [submitMessage, setSubmitMessage] = useState('');
 
+  // FIX: Moved useEffect to top level and put condition inside.
+  useEffect(() => {
+    if (!guestCode) {
+      setLoginRedirectPath('giftRegistry');
+      setCurrentPage('login');
+    }
+  }, [guestCode, setCurrentPage, setLoginRedirectPath]);
+  
   const fetchDuas = async () => {
     try {
       const response = await fetch(`${API_BASE_URL}/duas`);
@@ -177,9 +190,10 @@ const GiftRegistryPage = ({ guestCode, setCurrentPage, setLoginRedirectPath }) =
       setIsModalOpen(true);
     }
   };
-
-  // Unchanged form logic and JSX follows...
-  if (!guestCode) { useEffect(() => { setLoginRedirectPath('giftRegistry'); setCurrentPage('login'); }, [setCurrentPage, setLoginRedirectPath]); return null; }
+  
+  // Early return after hooks if not logged in
+  if (!guestCode) { return null; }
+  
   const handleChange = (e) => setNewDua(prev => ({ ...prev, [e.target.name]: e.target.value }));
   return ( <div className="min-h-screen bg-black p-3 text-stone-100"><div className="container mx-auto bg-gray-900 rounded-xl shadow-2xl p-4 md:p-6 mt-8 border border-gray-700"><h2 className="text-4xl font-extrabold mb-4 text-center">Duas</h2><p className="text-xl text-gray-300 mb-8 text-center">Your presence is the only gift we need! If you wish to give something, we have a Duas section. Please leave us some great duas.</p><div className="max-w-2xl mx-auto"><div className="bg-gray-800 rounded-lg p-4 h-96 overflow-y-auto mb-6 flex flex-col space-y-4">{duas.map(dua => ( <div key={dua.id} className="bg-gray-700 rounded-lg p-3 shadow"><p className="text-white font-semibold">{dua.name}</p><p className="text-gray-300">{dua.message}</p></div>))}</div><form onSubmit={handleSubmit} className="space-y-4"><input type="text" name="name" value={newDua.name} onChange={handleChange} placeholder="Your Name" className="w-full p-3 bg-gray-800 border border-gray-600 rounded-lg" /><textarea name="message" value={newDua.message} onChange={handleChange} rows="3" placeholder="Leave your dua here..." className="w-full p-3 bg-gray-800 border border-gray-600 rounded-lg"></textarea><button type="submit" disabled={isSubmitting} className="w-full bg-stone-200 text-black px-6 py-3 rounded-lg text-xl font-semibold shadow-lg hover:bg-stone-300 transition duration-300 disabled:opacity-50">{isSubmitting ? 'Sending...' : 'Send Dua'}</button></form></div></div><Modal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)}><h3 className="text-2xl font-bold mb-4 text-center text-stone-100">Thank You!</h3><p className="text-lg text-gray-300 text-center">{submitMessage}</p></Modal></div> );
 };
@@ -206,6 +220,13 @@ const GalleryPage = ({ guestCode, setCurrentPage, setLoginRedirectPath, isAdmin 
     useEffect(() => {
         if (guestCode) fetchMedia();
     }, [guestCode]);
+    
+    useEffect(() => { 
+        if (!guestCode) { 
+            setLoginRedirectPath('gallery'); 
+            setCurrentPage('login'); 
+        } 
+    }, [guestCode, setCurrentPage, setLoginRedirectPath]);
 
     const handleFileChange = async (e) => {
         const file = e.target.files[0];
@@ -238,8 +259,6 @@ const GalleryPage = ({ guestCode, setCurrentPage, setLoginRedirectPath, isAdmin 
         }
     };
 
-    // Unchanged JSX and access logic follows...
-    useEffect(() => { if (!guestCode) { setLoginRedirectPath('gallery'); setCurrentPage('login'); } }, [guestCode, setCurrentPage, setLoginRedirectPath]);
     const isAuthorized = JIC_CODES.includes(guestCode) || MIC_CODES.includes(guestCode) || isAdmin;
     if (!guestCode) return null;
     if (!isAuthorized) { return ( <div className="min-h-screen bg-black flex items-center justify-center p-4 text-stone-100"><div className="bg-gray-900 rounded-xl shadow-2xl p-8 w-full max-w-md border border-gray-700 text-center"><h2 className="text-3xl font-extrabold text-stone-100 mb-4">Access Denied</h2><p className="text-lg text-gray-300">This page is only available to specific guests.</p></div></div> ); }
@@ -299,7 +318,7 @@ const AdminPanelPage = () => {
       <div className="container mx-auto bg-gray-900 rounded-xl shadow-2xl p-4 mt-8 border border-gray-700">
         <h2 className="text-4xl font-extrabold mb-8 text-center">Admin Panel</h2>
         
-        <section className="mb-12 p-6 bg-gray-800 rounded-lg shadow-md"><h3 className="text-3xl font-bold text-stone-200 mb-6">Approve Media</h3><div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">{media.filter(m => !m.approved).map(item => ( <div key={item.id} className="bg-gray-700 p-2 rounded-lg">{item.type === 'image' ? <img src={item.url} className="w-full h-40 object-cover rounded"/> : <video src={item.url} className="w-full h-40 object-cover rounded" controls/>}<div className="flex justify-around mt-2"><button onClick={() => handleApproveMedia(item.id)} className="bg-green-600 px-3 py-1 rounded-md text-sm">Approve</button><button onClick={() => handleRejectMedia(item.id, item.url)} className="bg-red-600 px-3 py-1 rounded-md text-sm">Reject</button></div></div> ))}</div></section>
+        <section className="mb-12 p-6 bg-gray-800 rounded-lg shadow-md"><h3 className="text-3xl font-bold text-stone-200 mb-6">Approve Media</h3><div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">{media.filter(m => !m.approved).map(item => ( <div key={item.id} className="bg-gray-700 p-2 rounded-lg">{item.type === 'image' ? <img src={item.url} alt="Awaiting approval" className="w-full h-40 object-cover rounded"/> : <video src={item.url} className="w-full h-40 object-cover rounded" controls/>}<div className="flex justify-around mt-2"><button onClick={() => handleApproveMedia(item.id)} className="bg-green-600 px-3 py-1 rounded-md text-sm">Approve</button><button onClick={() => handleRejectMedia(item.id, item.url)} className="bg-red-600 px-3 py-1 rounded-md text-sm">Reject</button></div></div> ))}</div></section>
         
         <section className="mb-12 p-6 bg-gray-800 rounded-lg shadow-md"><h3 className="text-3xl font-bold text-stone-200 mb-6">Pending Duas for Review</h3><div className="overflow-x-auto"><table className="min-w-full bg-gray-900"><thead><tr className="bg-gray-700 text-left text-lg"><th className="p-3">Name</th><th className="p-3">Message</th><th className="p-3">Status</th><th className="p-3">Action</th></tr></thead><tbody>{duas.filter(d => d.status === 'pending').map(dua => (<tr key={dua.id} className="border-b border-gray-700"><td className="p-3">{dua.name}</td><td className="p-3 truncate max-w-sm">{dua.message}</td><td className="p-3"><span className="px-2 py-1 rounded-full text-sm bg-yellow-900 text-yellow-200">Pending</span></td><td className="p-3 space-x-2"><button onClick={() => updateDuaStatus(dua.id, 'approved')} className="bg-green-500 text-white px-3 py-1 rounded hover:bg-green-600">Approve</button><button onClick={() => updateDuaStatus(dua.id, 'rejected')} className="bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600">Reject</button></td></tr>))}</tbody></table></div></section>
 
