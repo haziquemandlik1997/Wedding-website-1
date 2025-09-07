@@ -1,0 +1,4 @@
+This is a special configuration file for Cloudflare Pages.
+It tells the server to serve the index.html file for any path
+that isn't a specific file (like an image or a CSS file).
+This is essential for Single-Page Applications (SPAs) to work correctly.
