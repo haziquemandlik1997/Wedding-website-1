@@ -1,5 +1,1 @@
-This is the single rule needed for a React application.
-It tells Cloudflare: "For any URL the user visits (/*),
-serve the main index.html file, and let React handle the routing."
-The status code 200 means "OK".
 /* /index.html 200
