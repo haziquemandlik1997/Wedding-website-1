@@ -297,7 +297,7 @@ const GiftRegistryPage = ({ guestCode, setCurrentPage, setLoginRedirectPath }) =
   
   const fetchDuas = async () => {
     try {
-      const response = await fetch(`${API_BASE_URL}/duas`);
+      const response = await fetch(new URL(`${API_BASE_URL}/duas`, window.location.origin));
       const data = await response.json();
       setDuas(data);
     } catch (error) {
@@ -317,7 +317,7 @@ const GiftRegistryPage = ({ guestCode, setCurrentPage, setLoginRedirectPath }) =
       return;
     }
     setIsSubmitting(true);
-   try {
+    try {
       const response = await fetch(new URL(`${API_BASE_URL}/duas`, window.location.origin), {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -529,6 +529,5 @@ const App = () => {
 };
 
 export default App;
-
 
 
