@@ -83,11 +83,154 @@ const HomePage = ({ setCurrentPage, isAdmin, guestCode, handleLogout }) => {
     </div>
   );
 };
-const allEvents = [ { title: "The Hakdara Ceremony", date: "Sunday, November 16, 2025", time: "11:00 AM - 8:00 PM", venue: "Mandlik House", mapLink: "https://maps.app.goo.gl/Kjn9qZpkLYdHt8PZ7", mapEmbed: "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3678.892333363303!2d86.1527858154051!3d22.76892308508181!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x39f5e38a33575e6d%3A0x5f5cf1a2e3ff2b6d!2sMandlik%20House!5e0!3m2!1sen!2sin!4v1678901234567!5m2!1sen!2sin", timeline: [] }, { title: "Haldi Ceremony (Bride's Side)", date: "Wednesday, November 19, 2025", time: "5:00 PM - 11:00 PM", venue: "Neelkanth Lawns", mapLink: "https://maps.app.goo.gl/1HiC9jLFtbqD8yhS8", mapEmbed: "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3766.07823588273!2d72.86812641538355!3d19.27848698697157!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3be7b06b8ffffff%3A0x5f5cf1a2e3ff2b6d!2sNeelkanth%20Lawn!5e0!3m2!1sen!2sin!4v1678901234567!5m2!1sen!2sin", timeline: [] }, { title: "Haldi Ceremony (Groom's Side)", date: "Thursday, November 20, 2025", time: "10:00 AM - 2:00 PM", venue: "Neelkanth Lawns", mapLink: "https://maps.app.goo.gl/1HiC9jLFtbqD8yhS8", mapEmbed: "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3766.07823588273!2d72.86812641538355!3d19.27848698697157!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3be7b06b8ffffff%3A0x5f5cf1a2e3ff2b6d!2sNeelkanth%20Lawn!5e0!3m2!1sen!2sin!4v1678901234567!5m2!1sen!2sin", timeline: [] }, { title: "Mehendi Ceremony", date: "Thursday, November 20, 2025", time: "5:00 PM - 9:00 PM", venue: "Neelkanth Lawns", mapLink: "https://maps.app.goo.gl/1HiC9jLFtbqD8yhS8", mapEmbed: "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3766.07823588273!2d72.86812641538355!3d19.27848698697157!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3be7b06b8ffffff%3A0x5f5cf1a2e3ff2b6d!2sNeelkanth%20Lawn!5e0!3m2!1sen!2sin!4v1678901234567!5m2!1sen!2sin", timeline: [] }, { title: "The Nikah Ceremony", date: "Friday, November 21, 2025", time: "1:30 PM - 4:00 PM", venue: "Telco Recreation Club, HS Road, Telco Colony, Jamshedpur, Jharkhand 831004", mapLink: "https://maps.app.goo.gl/wjVagG9Mk9p3wi2T9", mapEmbed: "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3678.775932591128!2d86.16053461540517!3d22.77361198507944!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x39f5e390a3623c53%3A0x3379126a1758c54!2sTelco%20Recreation%20Club!5e0!3m2!1sen!2sin!4v1678901234567!5m2!1sen!2sin", timeline: [ { time: "1:30 PM", event: "Guest Arrival" }, { time: "2:00 PM", event: "Nikah Ceremony" }, { time: "3:00 PM", event: "Dua & Blessings" }, { time: "3:30 PM", event: "Lunch" }, ] }, { title: "The Nikah", date: "Friday, November 21, 2025", time: "6:00 PM - 11:00 PM", venue: "Telco Recreation Club, HS Road, Telco Colony, Jamshedpur, Jharkhand 831004", mapLink: "https://maps.app.goo.gl/wjVagG9Mk9p3wi2T9", mapEmbed: "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3678.775932591128!2d86.16053461540517!3d22.77361198507944!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x39f5e390a3623c53%3A0x3379126a1758c54!2sTelco%20Recreation%20Club!5e0!3m2!1sen!2sin!4v1678901234567!5m2!1sen!2sin", timeline: [ { time: "6:00 PM", event: "Guest Arrival & Welcome" }, { time: "7:00 PM", event: "Couple's Grand Entrance" }, { time: "7:30 PM", event: "Dinner Service Begins" }, { time: "9:00 PM", event: "Rukhsati" }, ] }, { title: "The Walima", date: "Sunday, November 30, 2025", time: "5:00 PM - 10:00 PM", venue: "Hotel R K Inn, Bharti Nagar, Mira Road, Mira Bhayandar, Maharashtra 401107", mapLink: "https://www.google.com/maps/search/?api=1&query=Hotel+R+K+Inn,+Bharti+Nagar,+Mira+Road,+Mira+Bhayandar,+Maharashtra+401107", mapEmbed: "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3766.08407335299!2d72.86895301538356!3d19.2782209869717!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3be7b06bffffffff%3A0x457f659286f5029!2sHotel%20RK%20Inn!5e0!3m2!1sen!2sin!4v1678901234567!5m2!1sen!2sin", timeline: [ { time: "5:00 PM", event: "Guest Arrival & Welcome Drinks" }, { time: "6:00 PM", event: "Dinner Service Begins" }, { time: "8:00 PM", event: "Speeches & Toasts" }, { time: "9:00 PM", event: "Cake Cutting" }, ] } ];
+const allEvents = [ { title: "The Hakdara Ceremony", date: "Sunday, November 16, 2025", time: "11:00 AM - 8:00 PM", venue: "Address: The Mandlik House, 701, NG Vedant, Opp. RBK School, Beverly Park, Mira Road East.", mapLink: "https://maps.app.goo.gl/ciz4tt3QAHicbz8AA", mapEmbed: "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3765.869308151048!2d72.86878347593169!3d19.28723364491768!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3be7b0e8ffffffff%3A0x859c8c32d4323ab2!2sNG%20VEDANT!5e0!3m2!1sen!2sin!4v1724089855519!5m2!1sen!2sin", timeline: [] }, { title: "Haldi Ceremony (Bride's Side)", date: "Wednesday, November 19, 2025", time: "5:00 PM - 11:00 PM", venue: "TRF Club, Telco Colony, Jamshedpur, Jharkhand 831004", mapLink: "https://maps.app.goo.gl/NJLfAzEsRgw8NFjc6", mapEmbed: "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3678.78452336825!2d86.1609121759082!3d22.77326882672439!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x39f5e3895aaaaaab%3A0x445ce31d162624b5!2sTRF%20Club!5e0!3m2!1sen!2sin!4v1725834444583!5m2!1sen!2sin", timeline: [] }, { title: "Haldi Ceremony (Groom's Side)", date: "Thursday, November 20, 2025", time: "10:00 AM - 2:00 PM", venue: "TRF Club, Telco Colony, Jamshedpur, Jharkhand 831004", mapLink: "https://maps.app.goo.gl/NJLfAzEsRgw8NFjc6", mapEmbed: "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3678.78452336825!2d86.1609121759082!3d22.77326882672439!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x39f5e3895aaaaaab%3A0x445ce31d162624b5!2sTRF%20Club!5e0!3m2!1sen!2sin!4v1725834444583!5m2!1sen!2sin", timeline: [] }, { title: "Mehendi Ceremony", date: "Thursday, November 20, 2025", time: "5:00 PM - 9:00 PM", venue: "TRF Club, Telco Colony, Jamshedpur, Jharkhand 831004", mapLink: "https://maps.app.goo.gl/NJLfAzEsRgw8NFjc6", mapEmbed: "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3678.78452336825!2d86.1609121759082!3d22.77326882672439!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x39f5e3895aaaaaab%3A0x445ce31d162624b5!2sTRF%20Club!5e0!3m2!1sen!2sin!4v1725834444583!5m2!1sen!2sin", timeline: [] }, { title: "The Nikah Ceremony", date: "Friday, November 21, 2025", time: "1:30 PM - 4:00 PM", venue: "Telco Recreation Club, HS Road, Telco Colony, Jamshedpur, Jharkhand 831004", mapLink: "https://maps.app.goo.gl/wjVagG9Mk9p3wi2T9", mapEmbed: "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3678.775932591128!2d86.16053461540517!3d22.77361198507944!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x39f5e390a3623c53%3A0x3379126a1758c54!2sTelco%20Recreation%20Club!5e0!3m2!1sen!2sin!4v1678901234567!5m2!1sen!2sin", timeline: [ { time: "1:30 PM", event: "Guest Arrival" }, { time: "2:00 PM", event: "Nikah Ceremony" }, { time: "3:00 PM", event: "Dua & Blessings" }, { time: "3:30 PM", event: "Lunch" }, ] }, { title: "The Nikah", date: "Friday, November 21, 2025", time: "6:00 PM - 11:00 PM", venue: "Telco Recreation Club, HS Road, Telco Colony, Jamshedpur, Jharkhand 831004", mapLink: "https://maps.app.goo.gl/wjVagG9Mk9p3wi2T9", mapEmbed: "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3678.775932591128!2d86.16053461540517!3d22.77361198507944!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x39f5e390a3623c53%3A0x3379126a1758c54!2sTelco%20Recreation%20Club!5e0!3m2!1sen!2sin!4v1678901234567!5m2!1sen!2sin", timeline: [ { time: "6:00 PM", event: "Guest Arrival & Welcome" }, { time: "7:00 PM", event: "Couple's Grand Entrance" }, { time: "7:30 PM", event: "Dinner Service Begins" }, { time: "9:00 PM", event: "Rukhsati" }, ] }, { title: "The Walima", date: "Sunday, November 30, 2025", time: "5:00 PM - 10:00 PM", venue: "Hotel R K Inn, Bharti Nagar, Mira Road, Mira Bhayandar, Maharashtra 401107", mapLink: "https://www.google.com/maps/search/?api=1&query=Hotel+R+K+Inn,+Bharti+Nagar,+Mira+Road,+Mira+Bhayandar,+Maharashtra+401107", mapEmbed: "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3766.08407335299!2d72.86895301538356!3d19.2782209869717!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3be7b06bffffffff%3A0x457f659286f5029!2sHotel%20RK%20Inn!5e0!3m2!1sen!2sin!4v1678901234567!5m2!1sen!2sin", timeline: [ { time: "5:00 PM", event: "Guest Arrival & Welcome Drinks" }, { time: "6:00 PM", event: "Dinner Service Begins" }, { time: "8:00 PM", event: "Speeches & Toasts" }, { time: "9:00 PM", event: "Cake Cutting" }, ] } ];
 const getVisibleEvents = (guestCode) => { if (!guestCode) return PUBLIC_EVENTS; if (guestCode === ADMIN_CODE) return allEvents.map(e => e.title); if (JIC_CODES.includes(guestCode)) return JIC_EVENTS; if (JOC_CODES.includes(guestCode)) return JOC_EVENTS; if (MIC_CODES.includes(guestCode)) return MIC_EVENTS; if (MOC_CODES.includes(guestCode)) return MOC_EVENTS; return PUBLIC_EVENTS; };
-const EventDetailsPage = ({ guestCode }) => { const visibleEventTitles = getVisibleEvents(guestCode); const eventsToDisplay = allEvents.filter(event => visibleEventTitles.includes(event.title)); return ( <div className="min-h-screen bg-black p-3 text-stone-100"><div className="container mx-auto bg-gray-900 rounded-xl shadow-2xl p-4 md:p-6 mt-8 border border-gray-700"><h2 className="text-4xl font-extrabold text-stone-100 mb-8 text-center">Event Details</h2><div className="grid grid-cols-1 md:grid-cols-2 gap-8">{eventsToDisplay.map(event => (<section key={event.title} className="p-6 bg-gray-800 rounded-lg shadow-md"><h3 className="text-3xl font-bold text-stone-200 mb-4">{event.title}</h3><p className="text-lg text-gray-300 mb-2"><span className="font-semibold">Date:</span> {event.date}</p><p className="text-lg text-gray-300 mb-2"><span className="font-semibold">Time:</span> {event.time}</p><p className="text-lg text-gray-300 mb-4"><span className="font-semibold">Venue:</span> {event.venue}</p>{event.timeline.length > 0 && (<><h4 className="text-2xl font-bold text-stone-200 mt-6 mb-3">Timeline of Events</h4><ul className="list-disc list-inside text-lg text-gray-300 space-y-2">{event.timeline.map(item => (<li key={item.event}><span className="font-semibold">{item.time}:</span> {item.event}</li>))}</ul></>)}<a href={event.mapLink} target="_blank" rel="noopener noreferrer" className="block mt-6"><div className="relative w-full h-60 rounded-lg overflow-hidden shadow-lg cursor-pointer"><iframe src={event.mapEmbed} width="100%" height="100%" style={{ border: 0, pointerEvents: 'none' }} allowFullScreen="" loading="lazy" referrerPolicy="no-referrer-when-downgrade" title={`${event.title} Location`}></iframe></div></a></section>))}</div></div></div> ); };
-const LoginPage = ({ handleLogin, setCurrentPage, loginRedirectPath }) => { const [code, setCode] = useState(''); const [error, setError] = useState(''); const handleSubmit = (e) => { e.preventDefault(); if (VALID_UNIQUE_CODES.includes(code.trim().toUpperCase())) { handleLogin(code.trim().toUpperCase()); setCurrentPage(loginRedirectPath); } else { setError('Invalid unique code. Please try again.'); } }; return ( <div className="min-h-screen bg-black flex items-center justify-center p-4 text-stone-100"><div className="bg-gray-900 rounded-xl shadow-2xl p-8 w-full max-w-md border border-gray-700"><h2 className="text-4xl font-extrabold text-stone-100 mb-8 text-center">Enter Access Code</h2><p className="text-center text-lg text-gray-300 mb-8">Please enter your unique code (mentioned in the wedding invitation) to view the photo gallery and RSVP.</p><form onSubmit={handleSubmit} className="space-y-6"><input type="text" value={code} onChange={(e) => setCode(e.target.value)} placeholder="Unique Code" className="w-full p-3 bg-gray-800 border border-gray-600 rounded-lg text-center"/>{error && <p className="text-red-500 text-center text-sm">{error}</p>}<button type="submit" className="w-full bg-stone-200 text-black px-6 py-3 rounded-lg text-xl font-semibold shadow-lg hover:bg-stone-300">Enter</button></form></div></div> ); };
-const AccommodationPage = ({ guestCode, setCurrentPage, setLoginRedirectPath, isAdmin }) => { useEffect(() => { if (!guestCode) { setLoginRedirectPath('accommodation'); setCurrentPage('login'); } }, [guestCode, setCurrentPage, setLoginRedirectPath]); const isAuthorized = JIC_CODES.includes(guestCode) || MIC_CODES.includes(guestCode) || isAdmin; if (!guestCode) return null; if (!isAuthorized) { return ( <div className="min-h-screen bg-black flex items-center justify-center p-4 text-stone-100"><div className="bg-gray-900 rounded-xl shadow-2xl p-8 w-full max-w-md border border-gray-700 text-center"><h2 className="text-3xl font-extrabold text-stone-100 mb-4">Access Denied</h2><p className="text-lg text-gray-300">This page is only available to specific guests.</p></div></div> ); } return ( <div className="min-h-screen bg-black p-3 text-stone-100"><div className="container mx-auto bg-gray-900 rounded-xl shadow-2xl p-4 md:p-6 mt-8 border border-gray-700"><h2 className="text-4xl font-extrabold text-stone-100 mb-8 text-center">Accommodation</h2><div className="grid grid-cols-1 md:grid-cols-2 gap-8"><section className="p-6 bg-gray-800 rounded-lg shadow-md"><h3 className="text-3xl font-bold text-stone-200 mb-4">Jamshedpur Stay</h3><p className="text-lg text-gray-300 mb-2"><span className="font-semibold">Check-in:</span> Wednesday, November 19, 2025, 12:00 PM</p><p className="text-lg text-gray-300 mb-4"><span className="font-semibold">Check-out:</span> Saturday, November 22, 2025, 11:00 AM</p><p className="text-lg text-gray-300 mb-4">We have arranged accommodation for our out-of-town guests. Please let us know your travel plans.</p><a href="https://maps.app.goo.gl/tTUwtiNxsZKSVGfY8" target="_blank" rel="noopener noreferrer" className="block mt-6"><div className="relative w-full h-60 rounded-lg overflow-hidden shadow-lg cursor-pointer"><iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3678.892333363303!2d86.1527858154051!3d22.76892308508181!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x39f5e38a33575e6d%3A0x5f5cf1a2e3ff2b6d!2sMandlik%20House!5e0!3m2!1sen!2sin!4v1678901234567!5m2!1sen!2sin" width="100%" height="100%" style={{ border: 0, pointerEvents: 'none' }} allowFullScreen="" loading="lazy" referrerPolicy="no-referrer-when-downgrade" title="Jamshedpur Accommodation"></iframe></div></a></section><section className="p-6 bg-gray-800 rounded-lg shadow-md"><h3 className="text-3xl font-bold text-stone-200 mb-4">Mumbai Stay</h3><p className="text-lg text-gray-300 mb-2"><span className="font-semibold">Check-in:</span> Saturday, November 29, 2025, 12:00 PM</p><p className="text-lg text-gray-300 mb-4"><span className="font-semibold">Check-out:</span> Monday, December 1, 2025, 11:00 AM</p><p className="text-lg text-gray-300 mb-4">Accommodation is arranged at Hotel R K Inn. Please confirm your travel dates via RSVP.</p><a href="https://maps.app.goo.gl/uotwZybCVDdbPskR8" target="_blank" rel="noopener noreferrer" className="block mt-6"><div className="relative w-full h-60 rounded-lg overflow-hidden shadow-lg cursor-pointer"><iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3766.08407335299!2d72.86895301538356!3d19.2782209869717!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3be7b06bffffffff%3A0x457f659286f5029!2sHotel%20RK%20Inn!5e0!3m2!1sen!2sin!4v1678901234567!5m2!1sen!2sin" width="100%" height="100%" style={{ border: 0, pointerEvents: 'none' }} allowFullScreen="" loading="lazy" referrerPolicy="no-referrer-when-downgrade" title="Mumbai Accommodation"></iframe></div></a></section></div></div></div> ); };
+
+const EventDetailsPage = ({ guestCode, setCurrentPage, setLoginRedirectPath }) => { 
+    useEffect(() => {
+        if (!guestCode) {
+            setLoginRedirectPath('eventDetails');
+            setCurrentPage('login');
+        }
+    }, [guestCode, setCurrentPage, setLoginRedirectPath]);
+
+    if (!guestCode) {
+        return null; // Return nothing while redirecting
+    }
+
+    const visibleEventTitles = getVisibleEvents(guestCode); 
+    const eventsToDisplay = allEvents.filter(event => visibleEventTitles.includes(event.title)); 
+    
+    return ( 
+        <div className="min-h-screen bg-black p-3 text-stone-100">
+            <div className="container mx-auto bg-gray-900 rounded-xl shadow-2xl p-4 md:p-6 mt-8 border border-gray-700">
+                <h2 className="text-4xl font-extrabold text-stone-100 mb-8 text-center">Event Details</h2>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                    {eventsToDisplay.map(event => (
+                        <section key={event.title} className="p-6 bg-gray-800 rounded-lg shadow-md">
+                            <h3 className="text-3xl font-bold text-stone-200 mb-4">{event.title}</h3>
+                            <p className="text-lg text-gray-300 mb-2"><span className="font-semibold">Date:</span> {event.date}</p>
+                            <p className="text-lg text-gray-300 mb-2"><span className="font-semibold">Time:</span> {event.time}</p>
+                            <p className="text-lg text-gray-300 mb-4"><span className="font-semibold">Venue:</span> {event.venue}</p>
+                            {event.timeline.length > 0 && (
+                                <>
+                                    <h4 className="text-2xl font-bold text-stone-200 mt-6 mb-3">Timeline of Events</h4>
+                                    <ul className="list-disc list-inside text-lg text-gray-300 space-y-2">
+                                        {event.timeline.map(item => (
+                                            <li key={item.event}><span className="font-semibold">{item.time}:</span> {item.event}</li>
+                                        ))}
+                                    </ul>
+                                </>
+                            )}
+                            <a href={event.mapLink} target="_blank" rel="noopener noreferrer" className="block mt-6">
+                                <div className="relative w-full h-60 rounded-lg overflow-hidden shadow-lg cursor-pointer">
+                                    <iframe src={event.mapEmbed} width="100%" height="100%" style={{ border: 0, pointerEvents: 'none' }} allowFullScreen="" loading="lazy" referrerPolicy="no-referrer-when-downgrade" title={`${event.title} Location`}></iframe>
+                                </div>
+                            </a>
+                        </section>
+                    ))}
+                </div>
+            </div>
+        </div> 
+    ); 
+};
+
+const LoginPage = ({ handleLogin, setCurrentPage, loginRedirectPath }) => { 
+    const [code, setCode] = useState(''); 
+    const [error, setError] = useState(''); 
+
+    const handleCodeChange = (e) => {
+        const value = e.target.value.toUpperCase();
+        const filteredValue = value.replace(/[^A-Z0-9]/g, ''); // Allow only uppercase letters and numbers
+        setCode(filteredValue);
+    };
+
+    const handleSubmit = (e) => { 
+        e.preventDefault(); 
+        if (VALID_UNIQUE_CODES.includes(code.trim())) { 
+            handleLogin(code.trim()); 
+            setCurrentPage(loginRedirectPath); 
+        } else { 
+            setError('code not accepted, retry.'); // Update the error message
+        } 
+    }; 
+    
+    return ( 
+        <div className="min-h-screen bg-black flex items-center justify-center p-4 text-stone-100">
+            <div className="bg-gray-900 rounded-xl shadow-2xl p-8 w-full max-w-md border border-gray-700">
+                <h2 className="text-4xl font-extrabold text-stone-100 mb-8 text-center">Enter Access Code</h2>
+                <p className="text-center text-lg text-gray-300 mb-8">Please enter your unique code (mentioned in the wedding invitation) to view the photo gallery and RSVP.</p>
+                <form onSubmit={handleSubmit} className="space-y-6">
+                    <input 
+                        type="text" 
+                        value={code} 
+                        onChange={handleCodeChange} // Use the new handler
+                        placeholder="Unique Code" 
+                        className="w-full p-3 bg-gray-800 border border-gray-600 rounded-lg text-center"
+                    />
+                    {error && <p className="text-red-500 text-center text-sm">{error}</p>}
+                    <button type="submit" className="w-full bg-stone-200 text-black px-6 py-3 rounded-lg text-xl font-semibold shadow-lg hover:bg-stone-300">Enter</button>
+                </form>
+            </div>
+        </div> 
+    ); 
+};
+
+const AccommodationPage = ({ guestCode, setCurrentPage, setLoginRedirectPath, isAdmin }) => { 
+    useEffect(() => { 
+        if (!guestCode) { 
+            setLoginRedirectPath('accommodation'); 
+            setCurrentPage('login'); 
+        } 
+    }, [guestCode, setCurrentPage, setLoginRedirectPath]); 
+
+    const isAuthorized = JIC_CODES.includes(guestCode) || MIC_CODES.includes(guestCode) || isAdmin; 
+    
+    if (!guestCode) return null; 
+    
+    if (!isAuthorized) { 
+        return ( 
+            <div className="min-h-screen bg-black flex items-center justify-center p-4 text-stone-100">
+                <div className="bg-gray-900 rounded-xl shadow-2xl p-8 w-full max-w-md border border-gray-700 text-center">
+                    <h2 className="text-3xl font-extrabold text-stone-100 mb-4">Access Denied</h2>
+                    <p className="text-lg text-gray-300">This page is only available to specific guests.</p>
+                </div>
+            </div> 
+        ); 
+    } 
+    
+    return ( 
+        <div className="min-h-screen bg-black p-3 text-stone-100">
+            <div className="container mx-auto bg-gray-900 rounded-xl shadow-2xl p-4 md:p-6 mt-8 border border-gray-700">
+                <h2 className="text-4xl font-extrabold text-stone-100 mb-8 text-center">Accommodation</h2>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                    <section className="p-6 bg-gray-800 rounded-lg shadow-md">
+                        <h3 className="text-3xl font-bold text-stone-200 mb-4">Jamshedpur Stay</h3>
+                        <p className="text-lg text-gray-300 mb-2"><span className="font-semibold">Check-in:</span> Wednesday, November 19, 2025, 12:00 PM</p>
+                        <p className="text-lg text-gray-300 mb-4"><span className="font-semibold">Check-out:</span> Saturday, November 22, 2025, 11:00 AM</p>
+                        <p className="text-lg text-gray-300 mb-4">Accommodation is arranged at The Altira Hotel, Plot No.300, Zone 5, Birsanagar, Telco Colony, Jamshedpur, Jharkhand 831004. Please confirm your travel dates via RSVP.</p>
+                        <a href="https://maps.app.goo.gl/aqrU9nMRqWjwN48A9" target="_blank" rel="noopener noreferrer" className="block mt-6">
+                            <div className="relative w-full h-60 rounded-lg overflow-hidden shadow-lg cursor-pointer">
+                                <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3678.969248744165!2d86.15175967590807!3d22.76616422682979!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x39f5e3f4e3852c09%3A0x6733e839566395b2!2sThe%20Altira%20Hotel!5e0!3m2!1sen!2sin!4v1725883584989!5m2!1sen!2sin" width="100%" height="100%" style={{ border: 0, pointerEvents: 'none' }} allowFullScreen="" loading="lazy" referrerPolicy="no-referrer-when-downgrade" title="Jamshedpur Accommodation"></iframe>
+                            </div>
+                        </a>
+                    </section>
+                    <section className="p-6 bg-gray-800 rounded-lg shadow-md">
+                        <h3 className="text-3xl font-bold text-stone-200 mb-4">Mumbai Stay</h3>
+                        <p className="text-lg text-gray-300 mb-2"><span className="font-semibold">Check-in:</span> Saturday, November 29, 2025, 12:00 PM</p>
+                        <p className="text-lg text-gray-300 mb-4"><span className="font-semibold">Check-out:</span> Monday, December 1, 2025, 11:00 AM</p>
+                        <p className="text-lg text-gray-300 mb-4">Accommodation is arranged at Savana The Boutique Hotel, Building No 6, Hotel Unit, H-1, opp. Mari Gold Road, Beverly Park, Mira Road East, Thane, Mira Bhayandar, Maharashtra 401107. Please confirm your travel dates via RSVP.</p>
+                        <a href="https://maps.app.goo.gl/qR3u4YrRpTGc95m69" target="_blank" rel="noopener noreferrer" className="block mt-6">
+                            <div className="relative w-full h-60 rounded-lg overflow-hidden shadow-lg cursor-pointer">
+                                <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3766.071987518559!2d72.8715834759203!3d19.278772245228587!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3be7b06a4aaaaaab%3A0x7d12f127c569bd89!2sSavana%20the%20boutique%20Hotel!5e0!3m2!1sen!2sin!4v1725890259779!5m2!1sen!2sin" width="100%" height="100%" style={{ border: 0, pointerEvents: 'none' }} allowFullScreen="" loading="lazy" referrerPolicy="no-referrer-when-downgrade" title="Mumbai Accommodation"></iframe>
+                            </div>
+                        </a>
+                    </section>
+                </div>
+            </div>
+        </div> 
+    ); 
+};
 const ContactPage = () => { const [formData, setFormData] = useState({ name: '', email: '', message: '' }); const [isSubmitting, setIsSubmitting] = useState(false); const [submitMessage, setSubmitMessage] = useState(''); const [isModalOpen, setIsModalOpen] = useState(false); const handleChange = (e) => setFormData({ ...formData, [e.target.name]: e.target.value }); const handleSubmit = async (e) => { e.preventDefault(); setIsSubmitting(true); console.log('Contact form submitted:', formData); setSubmitMessage('Message sent successfully!'); setIsModalOpen(true); setFormData({ name: '', email: '', message: '' }); setIsSubmitting(false); }; return ( <div className="min-h-screen bg-black p-3 text-stone-100"><div className="container mx-auto bg-gray-900 rounded-xl shadow-2xl p-4 mt-8 border border-gray-700"><h2 className="text-4xl font-extrabold mb-8 text-center">Contact Us</h2><form onSubmit={handleSubmit} className="max-w-xl mx-auto space-y-6"><input type="text" name="name" value={formData.name} onChange={handleChange} required placeholder="Your Name" className="w-full p-3 bg-gray-800 border border-gray-600 rounded-lg"/><input type="email" name="email" value={formData.email} onChange={handleChange} required placeholder="Your Email" className="w-full p-3 bg-gray-800 border border-gray-600 rounded-lg"/><textarea name="message" value={formData.message} onChange={handleChange} rows="6" required placeholder="Your Message" className="w-full p-3 bg-gray-800 border border-gray-600 rounded-lg"></textarea><button type="submit" disabled={isSubmitting} className="w-full bg-stone-200 text-black px-6 py-3 rounded-lg text-xl font-semibold">{isSubmitting ? 'Sending...' : 'Send Message'}</button></form></div><Modal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)}><h3 className="text-2xl font-bold mb-4 text-center text-stone-100">Message Status</h3><p className="text-lg text-gray-300 text-center">{submitMessage}</p></Modal></div> ); };
 
 // --- ** MODIFIED COMPONENTS ** ---
@@ -330,7 +473,7 @@ const AdminPanelPage = () => {
   );
 };
 
-// --- Main App Component (Unchanged from previous versions) ---
+// --- Main App Component ---
 const App = () => {
   const [currentPage, setCurrentPage] = useState('home');
   const [guestCode, setGuestCode] = useState(null);
@@ -344,7 +487,7 @@ const App = () => {
   const renderPage = () => {
     switch (currentPage) {
       case 'home': return <HomePage setCurrentPage={setCurrentPage} isAdmin={isAdmin} guestCode={guestCode} handleLogout={handleLogout} />;
-      case 'eventDetails': return <EventDetailsPage guestCode={guestCode} />;
+      case 'eventDetails': return <EventDetailsPage guestCode={guestCode} setCurrentPage={setCurrentPage} setLoginRedirectPath={setLoginRedirectPath} />;
       case 'rsvp': return <RSVPPage guestCode={guestCode} setCurrentPage={setCurrentPage} setLoginRedirectPath={setLoginRedirectPath} />;
       case 'accommodation': return <AccommodationPage guestCode={guestCode} setCurrentPage={setCurrentPage} setLoginRedirectPath={setLoginRedirectPath} isAdmin={isAdmin} />;
       case 'giftRegistry': return <GiftRegistryPage guestCode={guestCode} setCurrentPage={setCurrentPage} setLoginRedirectPath={setLoginRedirectPath} />;
@@ -359,7 +502,25 @@ const App = () => {
   return (
     <div className="font-sans antialiased bg-black">
       <style>{`@import url('https://fonts.googleapis.com/css2?family=Finger+Paint&family=Nanum+Myeongjo&family=Quintessential&family=Satisfy&display=swap'); body { font-family: 'Quintessential', cursive; background-color: #000; } .font-nanum-myeongjo { font-family: 'Nanum Myeongjo', serif; } .font-satisfy { font-family: 'Satisfy', cursive; } .font-finger-paint { font-family: 'Finger Paint', cursive; }`}</style>
-      <Modal isOpen={showLoginModal && !guestCode && currentPage === 'home'} onClose={() => setShowLoginModal(false)}><div className="text-center"><h3 className="text-2xl font-bold mb-4 text-center text-stone-100">Welcome!</h3><p className="text-lg text-gray-300 mb-6">Please log in to access all features of our website.</p><div className="flex justify-center space-x-4"><button onClick={() => { setShowLoginModal(false); setCurrentPage('login'); }} className="bg-stone-200 text-black px-6 py-2 rounded-lg font-semibold">Login</button><button onClick={() => setShowLoginModal(false)} className="bg-gray-600 text-white px-6 py-2 rounded-lg font-semibold">Skip for now</button></div></div></Modal>
+      <Modal isOpen={showLoginModal && !guestCode && currentPage === 'home'} onClose={() => setShowLoginModal(false)}>
+        <div className="text-center">
+          <h3 className="text-2xl font-bold mb-4 text-center text-stone-100">Welcome!</h3>
+          <p className="text-lg text-gray-300 mb-6">Please log in to access all features of our website.</p>
+          <div className="flex justify-center space-x-4">
+            <button 
+              onClick={() => { 
+                setShowLoginModal(false); 
+                setLoginRedirectPath('home'); // Set redirect path to home
+                setCurrentPage('login'); 
+              }} 
+              className="bg-stone-200 text-black px-6 py-2 rounded-lg font-semibold"
+            >
+              Login
+            </button>
+            <button onClick={() => setShowLoginModal(false)} className="bg-gray-600 text-white px-6 py-2 rounded-lg font-semibold">Skip for now</button>
+          </div>
+        </div>
+      </Modal>
       {currentPage !== 'home' && <Navbar setCurrentPage={setCurrentPage} handleLogout={handleLogout} isAdmin={isAdmin} guestCode={guestCode} />}
       <main>{renderPage()}</main>
     </div>
