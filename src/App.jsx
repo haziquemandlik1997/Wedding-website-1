@@ -47,7 +47,7 @@ const HomePage = ({ setCurrentPage, isAdmin, guestCode, handleLogout }) => {
       <div className="bg-gray-900 rounded-xl shadow-2xl p-4 md:p-6 text-center max-w-3xl w-full transform transition-all duration-500 hover:scale-105 border border-gray-700">
         <div className="mb-6">
           <img 
-            src="https://i.postimg.cc/Z9yWvjHn/Gemini-Generated-Image-d1o4k2d1o4k2d1o4.jpg" 
+            src="https://as2.ftcdn.net/v2/jpg/06/26/10/37/1000_F_626103774_twshHrUzApupNUihit0SG2ouMEY9U7bp.jpg" 
             alt="Hazique & Zaufesha" 
             className="w-full h-auto max-w-md mx-auto rounded-lg object-cover"
             onError={(e) => { e.target.onerror = null; e.target.src='https://placehold.co/800x600/111827/44403c?text=Your+Photo+Here'; }}
@@ -528,4 +528,5 @@ const App = () => {
 };
 
 export default App;
+
 
