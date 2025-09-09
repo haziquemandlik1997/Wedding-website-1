@@ -53,7 +53,7 @@ const HomePage = ({ setCurrentPage, isAdmin, guestCode, handleLogout }) => {
             onError={(e) => { e.target.onerror = null; e.target.src='https://placehold.co/800x600/111827/44403c?text=Your+Photo+Here'; }}
           />
         </div>
-        <h2 className="text-3xl md:text-6xl font-extrabold text-stone-100 mb-6 animate-fade-in-down font-nanum-myeongjo">HAZIQUE  ZAUFESHA</h2>
+        <h2 className="text-3xl md:text-6xl font-extrabold text-stone-100 mb-6 animate-fade-in-down font-nanum-myeongjo">HAZ & ZAUF</h2>
         <p className="text-2xl md:text-3xl text-gray-300 mb-8 font-light leading-relaxed animate-fade-in font-satisfy">We are so excited to celebrate our special day with all of you. Explore our website for all the details.</p>
         <div className="flex flex-col sm:flex-row justify-center items-center space-y-4 sm:space-y-0 sm:space-x-6 mb-10">
           <button onClick={() => setCurrentPage('rsvp')} className="bg-stone-200 text-black px-8 py-4 rounded-full text-xl shadow-lg hover:bg-stone-300 transition-all duration-300 transform hover:scale-105 focus:outline-none focus:ring-4 focus:ring-stone-400 font-finger-paint">RSVP Now!</button>
@@ -529,6 +529,7 @@ const App = () => {
 };
 
 export default App;
+
 
 
 
