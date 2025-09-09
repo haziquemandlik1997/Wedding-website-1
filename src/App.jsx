@@ -317,8 +317,8 @@ const GiftRegistryPage = ({ guestCode, setCurrentPage, setLoginRedirectPath }) =
       return;
     }
     setIsSubmitting(true);
-    try {
-      const response = await fetch(`${API_BASE_URL}/duas`, {
+   try {
+      const response = await fetch(new URL(`${API_BASE_URL}/duas`, window.location.origin), {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(newDua),
@@ -327,7 +327,8 @@ const GiftRegistryPage = ({ guestCode, setCurrentPage, setLoginRedirectPath }) =
       setSubmitMessage("Thank you for your dua! It has been sent for review.");
       setNewDua({ name: '', message: '' });
     } catch (error) {
-      setSubmitMessage("Sorry, there was an error submitting your dua.");
+      console.error("Error submitting dua:", error);
+      setSubmitMessage(`Sorry, there was an error submitting your dua: ${error.message}`);
     } finally {
       setIsSubmitting(false);
       setIsModalOpen(true);
@@ -528,5 +529,6 @@ const App = () => {
 };
 
 export default App;
+
 
 
