@@ -29,19 +29,14 @@ export async function onRequest(context) {
   // --- R2 Media Storage Endpoints ---
 
   if (path === 'generate-upload-url') {
-    try {
-        const key = `${Date.now()}-${crypto.randomUUID()}`;
-        const signedUrl = await env.WEDDING_MEDIA_BUCKET.createPresignedUrl({
-            key: key,
-            action: 'put',
-            expires: 900, // 15 minutes
-        });
-        const publicUrl = `${env.R2_PUBLIC_URL}/${key}`;
-        return jsonResponse({ uploadUrl: signedUrl, publicUrl: publicUrl });
-    } catch (e) {
-        console.error("Error generating presigned URL:", e);
-        return jsonResponse({ error: "Could not generate upload URL. Please check server configuration (R2 binding and permissions)." }, 500);
-    }
+    const key = `${Date.now()}-${crypto.randomUUID()}`;
+    const signedUrl = await env.WEDDING_MEDIA_BUCKET.createPresignedUrl({
+      key: key,
+      action: 'put',
+      expires: 900, // 15 minutes
+    });
+    const publicUrl = `${env.R2_PUBLIC_URL}/${key}`;
+    return jsonResponse({ uploadUrl: signedUrl, publicUrl: publicUrl });
   }
 
   if (path === 'delete-object' && request.method === 'POST') {
@@ -64,11 +59,11 @@ export async function onRequest(context) {
   }
   
   if (path === 'duas' && request.method === 'POST') {
-    const { name, message, guestCode } = await request.json();
+    const { name, message } = await request.json();
     if (!name || !message) return jsonResponse({ error: 'Name and message are required' }, 400);
 
-    const stmt = env.WEDDING_DB.prepare("INSERT INTO duas (name, message, guestCode, status, timestamp) VALUES (?, ?, ?, 'pending', ?)");
-    await stmt.bind(name, message, guestCode || 'N/A', new Date().toISOString()).run();
+    const stmt = env.WEDDING_DB.prepare("INSERT INTO duas (name, message, status, timestamp) VALUES (?, ?, 'pending', ?)");
+    await stmt.bind(name, message, new Date().toISOString()).run();
     return jsonResponse({ success: true });
   }
 
@@ -141,3 +136,5 @@ export async function onRequest(context) {
 
   return jsonResponse({ error: 'Not Found' }, 404);
 }
+
+
