@@ -29,14 +29,32 @@ export async function onRequest(context) {
   // --- R2 Media Storage Endpoints ---
 
   if (path === 'generate-upload-url') {
-    const key = `${Date.now()}-${crypto.randomUUID()}`;
-    const signedUrl = await env.WEDDING_MEDIA_BUCKET.createPresignedUrl({
-      key: key,
-      action: 'put',
-      expires: 900, // 15 minutes
-    });
-    const publicUrl = `${env.R2_PUBLIC_URL}/${key}`;
-    return jsonResponse({ uploadUrl: signedUrl, publicUrl: publicUrl });
+    try {
+        // More robust check for the R2 binding
+        if (!env.WEDDING_MEDIA_BUCKET || typeof env.WEDDING_MEDIA_BUCKET.createPresignedUrl !== 'function') {
+            console.error("R2 bucket binding 'WEDDING_MEDIA_BUCKET' is not configured correctly or is missing.");
+            return jsonResponse({ error: "Server Configuration Error: The R2 bucket binding is not available." }, 500);
+        }
+        if (!env.R2_PUBLIC_URL) {
+            console.error("Environment variable 'R2_PUBLIC_URL' is not set.");
+            return jsonResponse({ error: "Server Configuration Error: The R2_PUBLIC_URL environment variable is missing." }, 500);
+        }
+
+        const key = `${Date.now()}-${crypto.randomUUID()}`;
+        const signedUrl = await env.WEDDING_MEDIA_BUCKET.createPresignedUrl({
+            key: key,
+            action: 'put',
+            expires: 900, // 15 minutes
+        });
+        const publicUrl = `${env.R2_PUBLIC_URL}/${key}`;
+        return jsonResponse({ uploadUrl: signedUrl, publicUrl: publicUrl });
+    } catch (e) {
+        console.error("Error in generate-upload-url:", e);
+        return jsonResponse({ 
+            error: "Failed to generate upload URL on the server.",
+            details: e.message || "An unknown error occurred.",
+        }, 500);
+    }
   }
 
   if (path === 'delete-object' && request.method === 'POST') {
@@ -136,5 +154,6 @@ export async function onRequest(context) {
 
   return jsonResponse({ error: 'Not Found' }, 404);
 }
+
 
 
