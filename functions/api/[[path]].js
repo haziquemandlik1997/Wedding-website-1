@@ -115,10 +115,17 @@ export async function onRequest(context) {
   }
 
   if (path === 'media' && request.method === 'POST') {
-    const { url, type } = await request.json();
-    const stmt = env.WEDDING_MEDIA_BUCKET.prepare("INSERT INTO media (url, type, approved, createdAt) VALUES (?, ?, 0, ?)");
-    await stmt.bind(url, type, new Date().toISOString()).run();
-    return jsonResponse({ success: true });
+  console.log('here');
+  const { url, type } = await request.json();
+  
+  // Debug log
+  console.log('Media POST request:', { url, type });
+
+  const stmt = env.WEDDING_MEDIA_BUCKET.prepare(
+    "INSERT INTO media (url, type, approved, createdAt) VALUES (?, ?, 0, ?)"
+  );
+  await stmt.bind(url, type, new Date().toISOString()).run();
+  return jsonResponse({ success: true });
   }
   
   if (path.startsWith('media/') && request.method === 'PUT') {
@@ -136,6 +143,7 @@ export async function onRequest(context) {
 
   return jsonResponse({ error: 'Not Found' }, 404);
 }
+
 
 
 
