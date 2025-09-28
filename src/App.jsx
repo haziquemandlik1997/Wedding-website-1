@@ -321,7 +321,7 @@ const GiftRegistryPage = ({ guestCode, setCurrentPage, setLoginRedirectPath }) =
       const response = await fetch(new URL(`${API_BASE_URL}/duas`, window.location.origin), {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(newDua),
+        body: JSON.stringify({ ...newDua, guestCode }),
       });
       if (!response.ok) throw new Error('Network response was not ok');
       setSubmitMessage("Thank you for your dua! It has been sent for review.");
