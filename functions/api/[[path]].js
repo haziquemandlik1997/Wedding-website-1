@@ -29,14 +29,31 @@ export async function onRequest(context) {
   // --- R2 Media Storage Endpoints ---
 
   if (path === 'generate-upload-url') {
-    const key = `${Date.now()}-${crypto.randomUUID()}`;
-    const signedUrl = await env.WEDDING_MEDIA_BUCKET.createPresignedUrl({
-      key: key,
-      action: 'put',
-      expires: 900, // 15 minutes
-    });
-    const publicUrl = `${env.R2_PUBLIC_URL}/${key}`;
-    return jsonResponse({ uploadUrl: signedUrl, publicUrl: publicUrl });
+    try {
+        if (!env.WEDDING_MEDIA_BUCKET) {
+            return jsonResponse({ error: "R2 bucket binding 'WEDDING_MEDIA_BUCKET' not found on the server." }, 500);
+        }
+        if (!env.R2_PUBLIC_URL) {
+            return jsonResponse({ error: "Environment variable 'R2_PUBLIC_URL' is not set on the server." }, 500);
+        }
+
+        const key = `${Date.now()}-${crypto.randomUUID()}`;
+        const signedUrl = await env.WEDDING_MEDIA_BUCKET.createPresignedUrl({
+            key: key,
+            action: 'put',
+            expires: 900, // 15 minutes
+        });
+        const publicUrl = `${env.R2_PUBLIC_URL}/${key}`;
+        return jsonResponse({ uploadUrl: signedUrl, publicUrl: publicUrl });
+    } catch (e) {
+        console.error("Error in generate-upload-url:", e);
+        // Return a more descriptive error to the client
+        return jsonResponse({ 
+            error: "Failed to generate upload URL on the server.",
+            details: e.message || "An unknown error occurred.",
+            cause: e.cause ? e.cause.toString() : 'N/A'
+        }, 500);
+    }
   }
 
   if (path === 'delete-object' && request.method === 'POST') {
@@ -59,11 +76,11 @@ export async function onRequest(context) {
   }
   
   if (path === 'duas' && request.method === 'POST') {
-    const { name, message } = await request.json();
+    const { name, message, guestCode } = await request.json();
     if (!name || !message) return jsonResponse({ error: 'Name and message are required' }, 400);
 
-    const stmt = env.WEDDING_DB.prepare("INSERT INTO duas (name, message, status, timestamp) VALUES (?, ?, 'pending', ?)");
-    await stmt.bind(name, message, new Date().toISOString()).run();
+    const stmt = env.WEDDING_DB.prepare("INSERT INTO duas (name, message, guestCode, status, timestamp) VALUES (?, ?, ?, 'pending', ?)");
+    await stmt.bind(name, message, guestCode || 'N/A', new Date().toISOString()).run();
     return jsonResponse({ success: true });
   }
 
@@ -136,5 +153,4 @@ export async function onRequest(context) {
 
   return jsonResponse({ error: 'Not Found' }, 404);
 }
-
 
