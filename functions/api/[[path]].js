@@ -116,25 +116,26 @@ export async function onRequest(context) {
 
   if (path === 'media' && request.method === 'POST') {
     const { url, type } = await request.json();
-    const stmt = env.WEDDING_DB.prepare("INSERT INTO media (url, type, approved, createdAt) VALUES (?, ?, 0, ?)");
+    const stmt = env.WEDDING_MEDIA_BUCKET.prepare("INSERT INTO media (url, type, approved, createdAt) VALUES (?, ?, 0, ?)");
     await stmt.bind(url, type, new Date().toISOString()).run();
     return jsonResponse({ success: true });
   }
   
   if (path.startsWith('media/') && request.method === 'PUT') {
     const id = path.split('/')[1];
-    const stmt = env.WEDDING_DB.prepare("UPDATE media SET approved = 1 WHERE id = ?");
+    const stmt = env.WEDDING_MEDIA_BUCKET.prepare("UPDATE media SET approved = 1 WHERE id = ?");
     await stmt.bind(id).run();
     return jsonResponse({ success: true });
   }
   
   if (path.startsWith('media/') && request.method === 'DELETE') {
     const id = path.split('/')[1];
-    await env.WEDDING_DB.prepare("DELETE FROM media WHERE id = ?").bind(id).run();
+    await env.WEDDING_MEDIA_BUCKET.prepare("DELETE FROM media WHERE id = ?").bind(id).run();
     return jsonResponse({ success: true });
   }
 
   return jsonResponse({ error: 'Not Found' }, 404);
 }
+
 
 
