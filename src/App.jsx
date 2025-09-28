@@ -321,7 +321,7 @@ const GiftRegistryPage = ({ guestCode, setCurrentPage, setLoginRedirectPath }) =
       const response = await fetch(new URL(`${API_BASE_URL}/duas`, window.location.origin), {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ ...newDua, guestCode }),
+        body: JSON.stringify(newDua),
       });
       if (!response.ok) throw new Error('Network response was not ok');
       setSubmitMessage("Thank you for your dua! It has been sent for review.");
@@ -348,8 +348,6 @@ const GalleryPage = ({ guestCode, setCurrentPage, setLoginRedirectPath, isAdmin 
     const [uploading, setUploading] = useState(false);
     const [uploadProgress, setUploadProgress] = useState(0);
     const [selectedImage, setSelectedImage] = useState(null);
-    const [modalMessage, setModalMessage] = useState('');
-    const [isModalOpen, setIsModalOpen] = useState(false);
     const fileInputRef = useRef(null);
     const xhrRef = useRef(null);
 
@@ -377,24 +375,10 @@ const GalleryPage = ({ guestCode, setCurrentPage, setLoginRedirectPath, isAdmin 
     const handleFileChange = async (e) => {
         const file = e.target.files[0];
         if (!file) return;
-        setUploading(true); 
-        setUploadProgress(0);
+        setUploading(true); setUploadProgress(0);
 
         try {
             const res = await fetch(`${API_BASE_URL}/generate-upload-url`);
-            
-            if (!res.ok) {
-                let errorDetails = `HTTP status ${res.status}`;
-                try {
-                    const errorData = await res.json();
-                    errorDetails = errorData.error || JSON.stringify(errorData);
-                } catch (jsonError) {
-                    // If the error response isn't JSON, use the raw text
-                    errorDetails = await res.text();
-                }
-                throw new Error(errorDetails);
-            }
-
             const { uploadUrl, publicUrl } = await res.json();
             
             xhrRef.current = new XMLHttpRequest();
@@ -408,25 +392,14 @@ const GalleryPage = ({ guestCode, setCurrentPage, setLoginRedirectPath, isAdmin 
                         headers: { 'Content-Type': 'application/json' },
                         body: JSON.stringify({ url: publicUrl, type: fileType }),
                     });
-                    setModalMessage("Thank you! Your media has been submitted for approval.");
-                    setIsModalOpen(true);
-                } else { 
-                    setModalMessage(`Upload failed. The server responded with status ${xhrRef.current.status}.`);
-                    setIsModalOpen(true);
-                }
+                    alert("Thank you! Your media has been submitted for approval.");
+                } else { alert("Upload failed. Please try again."); }
                 setUploading(false);
             };
-            xhrRef.current.onerror = () => { 
-                setModalMessage("An error occurred during the upload. Please check your network connection.");
-                setIsModalOpen(true);
-                setUploading(false); 
-            };
+            xhrRef.current.onerror = () => { alert("Upload failed."); setUploading(false); };
             xhrRef.current.send(file);
         } catch (error) {
-            console.error("Upload preparation failed:", error);
-            setModalMessage(`Could not prepare upload: ${error.message}`);
-            setIsModalOpen(true);
-            setUploading(false);
+            alert("Could not prepare upload."); setUploading(false);
         }
     };
 
@@ -434,7 +407,7 @@ const GalleryPage = ({ guestCode, setCurrentPage, setLoginRedirectPath, isAdmin 
     if (!guestCode) return null;
     if (!isAuthorized) { return ( <div className="min-h-screen bg-black flex items-center justify-center p-4 text-stone-100"><div className="bg-gray-900 rounded-xl shadow-2xl p-8 w-full max-w-md border border-gray-700 text-center"><h2 className="text-3xl font-extrabold text-stone-100 mb-4">Access Denied</h2><p className="text-lg text-gray-300">This page is only available to specific guests.</p></div></div> ); }
     const filteredMedia = mediaItems.filter(item => item.type === mediaType.slice(0, -1));
-    return ( <div className="min-h-screen bg-black p-3 text-stone-100"><div className="container mx-auto bg-gray-900 rounded-xl shadow-2xl p-4 mt-8 border border-gray-700"><h2 className="text-4xl font-extrabold mb-8 text-center">Gallery</h2><div className="flex justify-center mb-6"><button onClick={() => fileInputRef.current.click()} className="bg-stone-200 text-black px-6 py-3 rounded-lg text-xl font-semibold shadow-lg hover:bg-stone-300 transition duration-300">Upload Media</button><input type="file" ref={fileInputRef} onChange={handleFileChange} className="hidden" accept="image/*,video/*" /></div>{uploading && (<div className="w-full bg-gray-700 rounded-full h-2.5 mb-4"><div className="bg-blue-600 h-2.5 rounded-full" style={{ width: `${uploadProgress}%` }}></div></div>)}<div className="flex justify-center space-x-4 mb-8"><button onClick={() => setMediaType('images')} className={`px-6 py-2 rounded-lg font-semibold ${mediaType === 'images' ? 'bg-stone-200 text-black' : 'bg-gray-700'}`}>Images</button><button onClick={() => setMediaType('videos')} className={`px-6 py-2 rounded-lg font-semibold ${mediaType === 'videos' ? 'bg-stone-200 text-black' : 'bg-gray-700'}`}>Videos</button></div><div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">{filteredMedia.length > 0 ? filteredMedia.map(item => ( <div key={item.id} className="rounded-lg overflow-hidden cursor-pointer group" onClick={() => item.type === 'image' && setSelectedImage(item.url)}>{item.type === 'image' ? ( <img src={item.url} alt="Gallery content" className="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-300"/> ) : ( <video controls src={item.url} className="w-full h-auto"></video> )}</div> )) : ( <p className="text-center text-lg text-gray-300 col-span-full">No {mediaType} yet. Be the first to upload!</p> )}</div></div>{selectedImage && ( <div className="fixed inset-0 bg-black bg-opacity-90 flex items-center justify-center z-50" onClick={() => setSelectedImage(null)}><img src={selectedImage} alt="Full screen view" className="max-w-full max-h-full"/></div> )}<Modal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)}><h3 className="text-2xl font-bold mb-4 text-center text-stone-100">Upload Status</h3><p className="text-lg text-gray-300 text-center">{modalMessage}</p></Modal></div> );
+    return ( <div className="min-h-screen bg-black p-3 text-stone-100"><div className="container mx-auto bg-gray-900 rounded-xl shadow-2xl p-4 mt-8 border border-gray-700"><h2 className="text-4xl font-extrabold mb-8 text-center">Gallery</h2><div className="flex justify-center mb-6"><button onClick={() => fileInputRef.current.click()} className="bg-stone-200 text-black px-6 py-3 rounded-lg text-xl font-semibold shadow-lg hover:bg-stone-300 transition duration-300">Upload Media</button><input type="file" ref={fileInputRef} onChange={handleFileChange} className="hidden" accept="image/*,video/*" /></div>{uploading && (<div className="w-full bg-gray-700 rounded-full h-2.5 mb-4"><div className="bg-blue-600 h-2.5 rounded-full" style={{ width: `${uploadProgress}%` }}></div></div>)}<div className="flex justify-center space-x-4 mb-8"><button onClick={() => setMediaType('images')} className={`px-6 py-2 rounded-lg font-semibold ${mediaType === 'images' ? 'bg-stone-200 text-black' : 'bg-gray-700'}`}>Images</button><button onClick={() => setMediaType('videos')} className={`px-6 py-2 rounded-lg font-semibold ${mediaType === 'videos' ? 'bg-stone-200 text-black' : 'bg-gray-700'}`}>Videos</button></div><div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">{filteredMedia.length > 0 ? filteredMedia.map(item => ( <div key={item.id} className="rounded-lg overflow-hidden cursor-pointer group" onClick={() => item.type === 'image' && setSelectedImage(item.url)}>{item.type === 'image' ? ( <img src={item.url} alt="Gallery content" className="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-300"/> ) : ( <video controls src={item.url} className="w-full h-auto"></video> )}</div> )) : ( <p className="text-center text-lg text-gray-300 col-span-full">No {mediaType} yet. Be the first to upload!</p> )}</div></div>{selectedImage && ( <div className="fixed inset-0 bg-black bg-opacity-90 flex items-center justify-center z-50" onClick={() => setSelectedImage(null)}><img src={selectedImage} alt="Full screen view" className="max-w-full max-h-full"/></div> )}</div> );
 };
 
 const AdminPanelPage = () => {
@@ -556,4 +529,7 @@ const App = () => {
 };
 
 export default App;
+
+
+
 
