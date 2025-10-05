@@ -346,12 +346,10 @@ const GalleryPage = ({ guestCode, setCurrentPage, setLoginRedirectPath, isAdmin 
     const [mediaItems, setMediaItems] = useState([]);
     const [mediaType, setMediaType] = useState('images');
     const [uploading, setUploading] = useState(false);
-    const [uploadProgress, setUploadProgress] = useState(0);
     const [selectedImage, setSelectedImage] = useState(null);
     const [modalMessage, setModalMessage] = useState('');
     const [isModalOpen, setIsModalOpen] = useState(false);
     const fileInputRef = useRef(null);
-    const xhrRef = useRef(null);
 
     const fetchMedia = async () => {
         try {
@@ -378,7 +376,6 @@ const GalleryPage = ({ guestCode, setCurrentPage, setLoginRedirectPath, isAdmin 
         const file = e.target.files[0];
         if (!file) return;
         setUploading(true); 
-        setUploadProgress(0);
 
         try {
             // This is the new direct upload method
