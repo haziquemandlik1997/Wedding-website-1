@@ -42,12 +42,15 @@ export async function onRequest(context) {
         }
 
         const file = await request.blob();
-        const fileName = decodeURIComponent(request.headers.get('x-file-name')) || `upload-${Date.now()}`;
+        const encodedFileName = request.headers.get('x-file-name') || `upload-${Date.now()}`;
+        const fileName = decodeURIComponent(encodedFileName);
         const fileType = request.headers.get('x-file-type') || 'image';
         const guestCode = request.headers.get('x-guest-code') || 'Unknown';
 
         const key = `${Date.now()}-${fileName}`;
-        await env.WEDDING_MEDIA_BUCKET.put(key, file);
+        await env.WEDDING_MEDIA_BUCKET.put(key, file, {
+          httpMetadata: { contentType: file.type }
+        });
         const publicUrl = `${env.R2_PUBLIC_URL}/${key}`;
 
         const stmt = env.WEDDING_DB.prepare("INSERT INTO media (url, type, approved, createdAt, guestCode) VALUES (?, ?, 0, ?, ?)");
