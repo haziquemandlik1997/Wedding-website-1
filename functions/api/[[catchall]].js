@@ -10,7 +10,7 @@ const jsonResponse = (data, status = 200) => {
       // Allow requests from any origin (important for local development)
       'Access-Control-Allow-Origin': '*', 
       'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, OPTIONS',
-      'Access-Control-Allow-Headers': 'Content-Type, X-File-Name, X-File-Type',
+      'Access-Control-Allow-Headers': 'Content-Type, X-File-Name, X-File-Type, X-Guest-Code',
     },
   });
 };
@@ -27,7 +27,7 @@ export async function onRequest(context) {
         headers: {
           'Access-Control-Allow-Origin': '*',
           'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, OPTIONS',
-          'Access-Control-Allow-Headers': 'Content-Type, X-File-Name, X-File-Type',
+          'Access-Control-Allow-Headers': 'Content-Type, X-File-Name, X-File-Type, X-Guest-Code',
         },
     });
   }
@@ -42,15 +42,16 @@ export async function onRequest(context) {
         }
 
         const file = await request.blob();
-        const fileName = request.headers.get('x-file-name') || `upload-${Date.now()}`;
+        const fileName = decodeURIComponent(request.headers.get('x-file-name')) || `upload-${Date.now()}`;
         const fileType = request.headers.get('x-file-type') || 'image';
+        const guestCode = request.headers.get('x-guest-code') || 'Unknown';
 
         const key = `${Date.now()}-${fileName}`;
         await env.WEDDING_MEDIA_BUCKET.put(key, file);
         const publicUrl = `${env.R2_PUBLIC_URL}/${key}`;
 
-        const stmt = env.WEDDING_DB.prepare("INSERT INTO media (url, type, approved, createdAt) VALUES (?, ?, 0, ?)");
-        await stmt.bind(publicUrl, fileType, new Date().toISOString()).run();
+        const stmt = env.WEDDING_DB.prepare("INSERT INTO media (url, type, approved, createdAt, guestCode) VALUES (?, ?, 0, ?, ?)");
+        await stmt.bind(publicUrl, fileType, new Date().toISOString(), guestCode).run();
 
         return jsonResponse({ success: true, url: publicUrl });
 
@@ -136,9 +137,9 @@ export async function onRequest(context) {
   }
 
   if (path === 'media' && request.method === 'POST') {
-    const { url, type } = await request.json();
-    const stmt = env.WEDDING_DB.prepare("INSERT INTO media (url, type, approved, createdAt) VALUES (?, ?, 0, ?)");
-    await stmt.bind(url, type, new Date().toISOString()).run();
+    const { url, type, guestCode } = await request.json();
+    const stmt = env.WEDDING_DB.prepare("INSERT INTO media (url, type, approved, createdAt, guestCode) VALUES (?, ?, 0, ?, ?)");
+    await stmt.bind(url, type, new Date().toISOString(), guestCode).run();
     return jsonResponse({ success: true });
   }
   
