@@ -24,46 +24,39 @@ export async function onRequest(context) {
   // Handle CORS preflight requests
   if (request.method === 'OPTIONS') {
     return new Response(null, {
-        status: 204,
         headers: {
-            'Access-Control-Allow-Origin': '*',
-            'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, OPTIONS',
-            'Access-Control-Allow-Headers': 'Content-Type, X-File-Name, X-File-Type',
+          'Access-Control-Allow-Origin': '*',
+          'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, OPTIONS',
+          'Access-Control-Allow-Headers': 'Content-Type, X-File-Name, X-File-Type',
         },
     });
   }
 
-  // --- R2 Media Storage Endpoints (WORKAROUND IMPLEMENTED) ---
+  // --- R2 Media Storage Endpoints ---
 
+  // WORKAROUND: Direct upload endpoint to bypass presigned URL issues.
   if (path === 'upload' && request.method === 'POST') {
     try {
         if (!env.WEDDING_MEDIA_BUCKET) {
-            return jsonResponse({ error: "Server Configuration Error: R2 bucket is not bound." }, 500);
-        }
-        if (!env.R2_PUBLIC_URL) {
-            return jsonResponse({ error: "Server Configuration Error: R2_PUBLIC_URL is not set." }, 500);
+            return jsonResponse({ error: "Server Configuration Error: R2 bucket not bound." }, 500);
         }
 
-        const fileName = request.headers.get('x-file-name') || `${Date.now()}-unnamed-file`;
-        const key = `${Date.now()}-${crypto.randomUUID()}-${fileName}`;
-        
-        // Put the file directly into the R2 bucket from the request body
-        await env.WEDDING_MEDIA_BUCKET.put(key, request.body, {
-            httpMetadata: { contentType: request.headers.get('content-type') },
-        });
+        const file = await request.blob();
+        const fileName = request.headers.get('x-file-name') || `upload-${Date.now()}`;
+        const fileType = request.headers.get('x-file-type') || 'image';
 
+        const key = `${Date.now()}-${fileName}`;
+        await env.WEDDING_MEDIA_BUCKET.put(key, file);
         const publicUrl = `${env.R2_PUBLIC_URL}/${key}`;
-        
-        // After successful upload, create a record in the D1 database
-        const fileType = request.headers.get('x-file-type') || 'unknown';
+
         const stmt = env.WEDDING_DB.prepare("INSERT INTO media (url, type, approved, createdAt) VALUES (?, ?, 0, ?)");
         await stmt.bind(publicUrl, fileType, new Date().toISOString()).run();
 
         return jsonResponse({ success: true, url: publicUrl });
 
     } catch (e) {
-        console.error("Error during direct upload:", e);
-        return jsonResponse({ error: "Upload failed on the server.", details: e.message }, 500);
+        console.error("Upload error:", e);
+        return jsonResponse({ error: "Upload failed on server.", details: e.message }, 500);
     }
   }
 
@@ -91,7 +84,7 @@ export async function onRequest(context) {
     if (!name || !message) return jsonResponse({ error: 'Name and message are required' }, 400);
 
     const stmt = env.WEDDING_DB.prepare("INSERT INTO duas (name, message, guestCode, status, timestamp) VALUES (?, ?, ?, 'pending', ?)");
-    await stmt.bind(name, message, guestCode || 'N/A', new Date().toISOString()).run();
+    await stmt.bind(name, message, guestCode || 'Unknown', new Date().toISOString()).run();
     return jsonResponse({ success: true });
   }
 
@@ -115,13 +108,14 @@ export async function onRequest(context) {
 
   if (path === 'rsvps' && request.method === 'POST') {
     const rsvp = await request.json();
+    // Basic validation
     if (!rsvp.fullName || !rsvp.attending) {
         return jsonResponse({ error: "Full name and attending status are required." }, 400);
     }
     const stmt = env.WEDDING_DB.prepare("INSERT INTO rsvps (fullName, comingFrom, attending, guests, eventsAttending, message, guestCode, timestamp) VALUES (?, ?, ?, ?, ?, ?, ?, ?)");
     await stmt.bind(
         rsvp.fullName, rsvp.comingFrom, rsvp.attending, rsvp.guests, 
-        JSON.stringify(rsvp.eventsAttending),
+        JSON.stringify(rsvp.eventsAttending), // Store array as JSON string
         rsvp.message, rsvp.guestCode, new Date().toISOString()
     ).run();
     return jsonResponse({ success: true });
@@ -139,6 +133,13 @@ export async function onRequest(context) {
     }
     const { results } = await query.all();
     return jsonResponse(results);
+  }
+
+  if (path === 'media' && request.method === 'POST') {
+    const { url, type } = await request.json();
+    const stmt = env.WEDDING_DB.prepare("INSERT INTO media (url, type, approved, createdAt) VALUES (?, ?, 0, ?)");
+    await stmt.bind(url, type, new Date().toISOString()).run();
+    return jsonResponse({ success: true });
   }
   
   if (path.startsWith('media/') && request.method === 'PUT') {
