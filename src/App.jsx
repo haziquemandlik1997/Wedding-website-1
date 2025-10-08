@@ -383,7 +383,7 @@ const GalleryPage = ({ guestCode, setCurrentPage, setLoginRedirectPath, isAdmin 
                 method: 'POST',
                 headers: {
                     'Content-Type': file.type,
-                    'X-File-Name': file.name,
+                    'X-File-Name': encodeURIComponent(file.name),
                     'X-File-Type': file.type.startsWith('image/') ? 'image' : 'video',
                 },
                 body: file,
