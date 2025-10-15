@@ -47,7 +47,7 @@ const HomePage = ({ setCurrentPage, isAdmin, guestCode, handleLogout }) => {
       <div className="bg-gray-900 rounded-xl shadow-2xl p-4 md:p-6 text-center max-w-3xl w-full transform transition-all duration-500 hover:scale-105 border border-gray-700">
         <div className="mb-6">
           <img 
-            src="https://media.haziqueandzaufesha.com/1760565562008-Hazique%20Nanu%20Zaufesha%20Edited.jpg" 
+            src="https://as2.ftcdn.net/v2/jpg/06/26/10/37/1000_F_626103774_twshHrUzApupNUihit0SG2ouMEY9U7bp.jpg" 
             alt="Hazique & Zaufesha" 
             className="w-full h-auto max-w-md mx-auto rounded-lg object-cover"
             onError={(e) => { e.target.onerror = null; e.target.src='https://placehold.co/800x600/111827/44403c?text=Your+Photo+Here'; }}
@@ -346,7 +346,7 @@ const GalleryPage = ({ guestCode, setCurrentPage, setLoginRedirectPath, isAdmin 
     const [mediaItems, setMediaItems] = useState([]);
     const [mediaType, setMediaType] = useState('images');
     const [uploading, setUploading] = useState(false);
-    const [selectedImage, setSelectedImage] = useState(null);
+    const [selectedMedia, setSelectedMedia] = useState(null); // Changed from selectedImage
     const [modalMessage, setModalMessage] = useState('');
     const [isModalOpen, setIsModalOpen] = useState(false);
     const fileInputRef = useRef(null);
@@ -413,12 +413,22 @@ const GalleryPage = ({ guestCode, setCurrentPage, setLoginRedirectPath, isAdmin 
             setUploading(false);
         }
     };
+    
+    const downloadMedia = (url) => {
+        const link = document.createElement('a');
+        link.href = url;
+        link.setAttribute('download', '');
+        link.setAttribute('target', '_blank');
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+    };
 
     const isAuthorized = JIC_CODES.includes(guestCode) || MIC_CODES.includes(guestCode) || isAdmin;
     if (!guestCode) return null;
     if (!isAuthorized) { return ( <div className="min-h-screen bg-black flex items-center justify-center p-4 text-stone-100"><div className="bg-gray-900 rounded-xl shadow-2xl p-8 w-full max-w-md border border-gray-700 text-center"><h2 className="text-3xl font-extrabold text-stone-100 mb-4">Access Denied</h2><p className="text-lg text-gray-300">This page is only available to specific guests.</p></div></div> ); }
     const filteredMedia = mediaItems.filter(item => item.type === mediaType.slice(0, -1));
-    return ( <div className="min-h-screen bg-black p-3 text-stone-100"><div className="container mx-auto bg-gray-900 rounded-xl shadow-2xl p-4 mt-8 border border-gray-700"><h2 className="text-4xl font-extrabold mb-8 text-center">Gallery</h2><div className="flex justify-center mb-6"><button onClick={() => fileInputRef.current.click()} className="bg-stone-200 text-black px-6 py-3 rounded-lg text-xl font-semibold shadow-lg hover:bg-stone-300 transition duration-300" disabled={uploading}>{uploading ? 'Uploading...' : 'Upload Media'}</button><input type="file" ref={fileInputRef} onChange={handleFileChange} className="hidden" accept="image/*,video/*" /></div><div className="flex justify-center space-x-4 mb-8"><button onClick={() => setMediaType('images')} className={`px-6 py-2 rounded-lg font-semibold ${mediaType === 'images' ? 'bg-stone-200 text-black' : 'bg-gray-700'}`}>Images</button><button onClick={() => setMediaType('videos')} className={`px-6 py-2 rounded-lg font-semibold ${mediaType === 'videos' ? 'bg-stone-200 text-black' : 'bg-gray-700'}`}>Videos</button></div><div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">{filteredMedia.length > 0 ? filteredMedia.map(item => ( <div key={item.id} className="rounded-lg overflow-hidden cursor-pointer group" onClick={() => item.type === 'image' && setSelectedImage(item.url)}>{item.type === 'image' ? ( <img src={item.url} alt="Gallery content" className="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-300"/> ) : ( <video controls src={item.url} className="w-full h-auto"></video> )}</div> )) : ( <p className="text-center text-lg text-gray-300 col-span-full">No {mediaType} yet. Be the first to upload!</p> )}</div></div>{selectedImage && ( <div className="fixed inset-0 bg-black bg-opacity-90 flex items-center justify-center z-50" onClick={() => setSelectedImage(null)}><img src={selectedImage} alt="Full screen view" className="max-w-full max-h-full"/></div> )}<Modal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)}><h3 className="text-2xl font-bold mb-4 text-center text-stone-100">Upload Status</h3><p className="text-lg text-gray-300 text-center">{modalMessage}</p></Modal></div> );
+    return ( <div className="min-h-screen bg-black p-3 text-stone-100"><div className="container mx-auto bg-gray-900 rounded-xl shadow-2xl p-4 mt-8 border border-gray-700"><h2 className="text-4xl font-extrabold mb-8 text-center">Gallery</h2><div className="flex justify-center mb-6"><button onClick={() => fileInputRef.current.click()} className="bg-stone-200 text-black px-6 py-3 rounded-lg text-xl font-semibold shadow-lg hover:bg-stone-300 transition duration-300" disabled={uploading}>{uploading ? 'Uploading...' : 'Upload Media'}</button><input type="file" ref={fileInputRef} onChange={handleFileChange} className="hidden" accept="image/*,video/*" /></div><div className="flex justify-center space-x-4 mb-8"><button onClick={() => setMediaType('images')} className={`px-6 py-2 rounded-lg font-semibold ${mediaType === 'images' ? 'bg-stone-200 text-black' : 'bg-gray-700'}`}>Images</button><button onClick={() => setMediaType('videos')} className={`px-6 py-2 rounded-lg font-semibold ${mediaType === 'videos' ? 'bg-stone-200 text-black' : 'bg-gray-700'}`}>Videos</button></div><div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">{filteredMedia.length > 0 ? filteredMedia.map(item => ( <div key={item.id} className="relative rounded-lg overflow-hidden group">{item.type === 'image' ? ( <img src={item.url} alt="Gallery content" className="w-full h-full object-cover transform transition-transform duration-300"/> ) : ( <video src={item.url} className="w-full h-full object-cover"></video> )}<div className="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-60 transition-all duration-300 flex items-center justify-center space-x-4"><button onClick={() => setSelectedMedia(item)} className="p-3 bg-white text-black rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-300 transform hover:scale-110"><svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" /><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" /></svg></button><button onClick={() => downloadMedia(item.url)} className="p-3 bg-white text-black rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-300 transform hover:scale-110"><svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" /></svg></button></div></div> )) : ( <p className="text-center text-lg text-gray-300 col-span-full">No {mediaType} yet. Be the first to upload!</p> )}</div></div>{selectedMedia && ( <div className="fixed inset-0 bg-black bg-opacity-90 flex items-center justify-center z-50 p-4" onClick={() => setSelectedMedia(null)}>{selectedMedia.type === 'image' ? ( <img src={selectedMedia.url} alt="Full screen view" className="max-w-full max-h-full rounded-lg"/> ) : ( <video controls autoPlay src={selectedMedia.url} className="max-w-full max-h-full rounded-lg"></video> )}</div> )}<Modal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)}><h3 className="text-2xl font-bold mb-4 text-center text-stone-100">Upload Status</h3><p className="text-lg text-gray-300 text-center">{modalMessage}</p></Modal></div> );
 };
 
 const AdminPanelPage = () => {
@@ -552,4 +562,5 @@ const App = () => {
 };
 
 export default App;
+
 
