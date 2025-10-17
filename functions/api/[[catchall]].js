@@ -5,10 +5,10 @@
 const jsonResponse = (data, status = 200) => {
   return new Response(JSON.stringify(data), {
     status: status,
-    headers: { 
+    headers: {
       'Content-Type': 'application/json',
       // Allow requests from any origin (important for local development)
-      'Access-Control-Allow-Origin': '*', 
+      'Access-Control-Allow-Origin': '*',
       'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, OPTIONS',
       'Access-Control-Allow-Headers': 'Content-Type, X-File-Name, X-File-Type, X-Guest-Code',
     },
@@ -33,6 +33,47 @@ export async function onRequest(context) {
   }
 
   // --- R2 Media Storage Endpoints ---
+
+  // NEW: Download proxy endpoint to force file downloads
+  if (path === 'download' && request.method === 'GET') {
+    try {
+      const mediaUrl = url.searchParams.get('url');
+
+      // Security: Ensure we're only fetching from our own R2 bucket public URL
+      if (!mediaUrl || !mediaUrl.startsWith(env.R2_PUBLIC_URL)) {
+        return new Response('Invalid or missing URL parameter.', { status: 400 });
+      }
+
+      // Extract the object key from the full URL
+      const key = mediaUrl.substring(env.R2_PUBLIC_URL.length + 1);
+      
+      // Attempt to get the original filename, decoding it from the URL
+      const filename = decodeURIComponent(key.substring(key.indexOf('-') + 1));
+
+      // Fetch the object from R2
+      const object = await env.WEDDING_MEDIA_BUCKET.get(key);
+      if (object === null) {
+        return new Response('Object Not Found', { status: 404 });
+      }
+
+      // Create new headers, copying existing metadata from R2
+      const headers = new Headers();
+      object.writeHttpMetadata(headers);
+      // This is the crucial header that tells the browser to download the file
+      headers.set('Content-Disposition', `attachment; filename="${filename}"`);
+      headers.set('Access-Control-Allow-Origin', '*');
+
+      // Return the object's body with the new headers
+      return new Response(object.body, {
+        headers,
+      });
+
+    } catch (e) {
+      console.error("Download proxy error:", e);
+      return new Response('Failed to download file.', { status: 500 });
+    }
+  }
+
 
   // WORKAROUND: Direct upload endpoint to bypass presigned URL issues.
   if (path === 'upload' && request.method === 'POST') {
@@ -161,4 +202,3 @@ export async function onRequest(context) {
 
   return jsonResponse({ error: 'Not Found' }, 404);
 }
-
