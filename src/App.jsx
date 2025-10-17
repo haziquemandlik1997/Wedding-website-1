@@ -416,10 +416,11 @@ const GalleryPage = ({ guestCode, setCurrentPage, setLoginRedirectPath, isAdmin 
     };
     
     const downloadMedia = (url) => {
+        // This now points to our backend proxy endpoint
+        const downloadUrl = `${API_BASE_URL}/download?url=${encodeURIComponent(url)}`;
         const link = document.createElement('a');
-        link.href = url;
-        const fileName = url.substring(url.lastIndexOf('/') + 1) || 'download';
-        link.setAttribute('download', fileName);
+        link.href = downloadUrl;
+        // The browser will use the filename from the backend's 'Content-Disposition' header
         document.body.appendChild(link);
         link.click();
         document.body.removeChild(link);
@@ -478,10 +479,11 @@ const AdminPanelPage = () => {
   };
 
   const downloadMedia = (url) => {
+    // This now points to our backend proxy endpoint
+    const downloadUrl = `${API_BASE_URL}/download?url=${encodeURIComponent(url)}`;
     const link = document.createElement('a');
-    link.href = url;
-    const fileName = url.substring(url.lastIndexOf('/') + 1) || 'download';
-    link.setAttribute('download', fileName);
+    link.href = downloadUrl;
+    // The browser will use the filename from the backend's 'Content-Disposition' header
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
@@ -563,6 +565,7 @@ const App = () => {
 };
 
 export default App;
+
 
 
 
