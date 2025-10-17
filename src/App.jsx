@@ -415,29 +415,14 @@ const GalleryPage = ({ guestCode, setCurrentPage, setLoginRedirectPath, isAdmin 
         }
     };
     
-    const downloadMedia = async (url) => {
-        try {
-            const response = await fetch(url);
-            if (!response.ok) throw new Error('Network response was not ok');
-            const blob = await response.blob();
-            const objectUrl = window.URL.createObjectURL(blob);
-            
-            const link = document.createElement('a');
-            link.href = objectUrl;
-            
-            const fileName = url.substring(url.lastIndexOf('/') + 1) || 'download';
-            link.setAttribute('download', fileName);
-            
-            document.body.appendChild(link);
-            link.click();
-            
-            document.body.removeChild(link);
-            window.URL.revokeObjectURL(objectUrl);
-        } catch (error) {
-            console.error("Download failed:", error);
-            setModalMessage(`Download failed: ${error.message}. You can try right-clicking the link to save.`);
-            setIsModalOpen(true);
-        }
+    const downloadMedia = (url) => {
+        const link = document.createElement('a');
+        link.href = url;
+        const fileName = url.substring(url.lastIndexOf('/') + 1) || 'download';
+        link.setAttribute('download', fileName);
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
     };
 
     const isAuthorized = JIC_CODES.includes(guestCode) || MIC_CODES.includes(guestCode) || isAdmin;
@@ -495,8 +480,8 @@ const AdminPanelPage = () => {
   const downloadMedia = (url) => {
     const link = document.createElement('a');
     link.href = url;
-    link.setAttribute('download', '');
-    link.setAttribute('target', '_blank');
+    const fileName = url.substring(url.lastIndexOf('/') + 1) || 'download';
+    link.setAttribute('download', fileName);
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
@@ -578,6 +563,7 @@ const App = () => {
 };
 
 export default App;
+
 
 
 
